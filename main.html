@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТВиС — Шпаргалка</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Unbounded:wght@400;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --bg2: #13161e;
+  --bg3: #1a1e28;
+  --bg4: #212636;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #e8eaf2;
+  --text2: #9aa0b8;
+  --text3: #5a6080;
+  --accent: #7c6cfa;
+  --accent2: #9d91fb;
+  --accent-bg: rgba(124,108,250,0.12);
+  --green: #3ecf8e;
+  --green-bg: rgba(62,207,142,0.1);
+  --amber: #f5a623;
+  --amber-bg: rgba(245,166,35,0.1);
+  --red: #ff6b6b;
+  --red-bg: rgba(255,107,107,0.1);
+  --blue: #4da6ff;
+  --blue-bg: rgba(77,166,255,0.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* LAYOUT */
+.shell { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  padding: 0 0 2rem;
+  z-index: 100;
+}
+.logo {
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+.logo-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent2);
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+}
+.logo-sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+.nav-section {
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 1.25rem;
+  color: var(--text2);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+}
+.nav-item:hover { color: var(--text); background: var(--bg3); }
+.nav-item.active {
+  color: var(--accent2);
+  border-left-color: var(--accent);
+  background: var(--accent-bg);
+}
+.nav-badge {
+  font-size: 10px;
+  background: var(--bg4);
+  color: var(--text3);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: auto;
+}
+
+.main {
+  margin-left: 220px;
+  flex: 1;
+  max-width: 1600px;
+  width: calc(100vw - 220px);
+  margin-right: auto;
+  padding: 2.5rem 3rem 5rem;
+}
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+
+/* HEADER */
+.page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.page-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+}
+.page-desc { color: var(--text2); margin-top: 0.5rem; font-size: 14px; }
+
+h3 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text3);
+  margin: 2rem 0 0.75rem;
+}
+
+/* FORMULA CARD */
+.formula-card {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 0.75rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.formula-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 3px 0 0 3px;
+}
+.formula-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent2);
+  margin-bottom: 0.4rem;
+}
+.formula-math {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.formula-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0.75rem 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 0.75rem 0; }
+@media (max-width: 768px) {
+
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+    max-width: none;
+    padding: 1rem;
+  }
+
+  .grid2,
+  .grid3 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .page-desc {
+    font-size: 14px;
+  }
+
+  .formula-card,
+  .algo-card,
+  .solver,
+  .qref {
+    width: 100%;
+  }
+
+  .formula-math {
+    font-size: 14px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tbl {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .step-content {
+    font-size: 14px;
+  }
+
+  .solver-answer {
+    overflow-x: auto;
+  }
+}
+
+/* CALLOUT */
+.callout {
+  display: flex;
+  gap: 12px;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0.75rem 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  align-items: flex-start;
+}
+.callout.info { background: var(--blue-bg); border: 1px solid rgba(77,166,255,0.2); color: #aaccf5; }
+.callout.warn { background: var(--amber-bg); border: 1px solid rgba(245,166,35,0.2); color: #e8c97a; }
+.callout.ok { background: var(--green-bg); border: 1px solid rgba(62,207,142,0.2); color: #7de0b5; }
+.callout.tip { background: var(--accent-bg); border: 1px solid rgba(124,108,250,0.2); color: var(--accent2); }
+.callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* TABLE */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 0.75rem 0; }
+.tbl th {
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border2);
+}
+.tbl td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  vertical-align: top;
+}
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--bg3); }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent2); }
+
+/* STEPS (решение задачи) */
+.solver {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+.solver-header {
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.solver-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent-bg);
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.solver-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); }
+.solver-task { font-size: 14px; color: var(--text); line-height: 1.55; margin-top: 2px; }
+.solver-body { padding: 0 }
+.step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.step-row:last-child { border-bottom: none; }
+.step-row:hover { background: var(--bg3); }
+.step-num-col {
+  width: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14px 0 14px;
+}
+.step-bubble {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  color: var(--accent2);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+.step-content {
+  flex: 1;
+  padding: 12px 1.25rem 12px 0;
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.step-content .math {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg4);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 13px;
+  color: var(--accent2);
+  display: inline;
+}
+.step-content .ans {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--green);
+  font-weight: 700;
+  font-size: 14px;
+}
+.step-content .highlight { color: var(--text); font-weight: 600; }
+.solver-answer {
+  padding: 0.75rem 1.25rem;
+  background: var(--green-bg);
+  border-top: 1px solid rgba(62,207,142,0.15);
+  font-size: 13px;
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+  margin: 2px;
+}
+.tag.purple { background: rgba(124,108,250,0.15); color: var(--accent2); }
+.tag.green { background: var(--green-bg); color: var(--green); }
+.tag.amber { background: var(--amber-bg); color: var(--amber); }
+.tag.red { background: var(--red-bg); color: var(--red); }
+.tag.blue { background: var(--blue-bg); color: var(--blue); }
+
+/* ALGO (алгоритм выбора) */
+.algo-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 0.75rem 0;
+}
+.algo-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; }
+.algo-branch {
+  display: flex;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 13.5px;
+  color: var(--text2);
+  align-items: flex-start;
+}
+.algo-arrow { color: var(--accent); flex-shrink: 0; font-weight: 700; }
+.algo-result { color: var(--text); font-weight: 600; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+/* QUICK REF BOX */
+.qref {
+  background: linear-gradient(135deg, rgba(124,108,250,0.08) 0%, rgba(77,166,255,0.05) 100%);
+  border: 1px solid rgba(124,108,250,0.2);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 0.75rem 0;
+}
+.qref-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent2); margin-bottom: 0.75rem; }
+.qref-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13.5px; }
+.qref-row:last-child { border-bottom: none; }
+.qref-label { color: var(--text2); }
+.qref-val { font-family: 'JetBrains Mono', monospace; color: var(--accent2); font-size: 13px; }
+
+p { color: var(--text2); margin-bottom: 0.5rem; font-size: 14px; }
+strong { color: var(--text); font-weight: 600; }
+em { color: var(--accent2); font-style: normal; font-weight: 600; }
+
+/* mobile burger */
+.burger { display: none; position: fixed; top: 1rem; right: 1rem; z-index: 200; background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 10px; cursor: pointer; color: var(--text); font-size: 18px; }
+@media(max-width:700px) { .burger { display: flex; } }
+</style>
+</head>
+<body>
+
+<div class="shell">
+<button class="burger" onclick="toggleMenu()">
+☰
+</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-title">ТВиС</div>
+    <div class="logo-sub">Шпаргалка к контрольной</div>
+  </div>
+
+  <div class="nav-section">Раздел 1</div>
+  <a class="nav-item active" onclick="show('comb')">
+    <span>📐</span> Комбинаторика
+    <span class="nav-badge">1.1</span>
+  </a>
+  <a class="nav-item" onclick="show('events')">
+    <span>🎲</span> Случайные события
+    <span class="nav-badge">1.2</span>
+  </a>
+  <a class="nav-item" onclick="show('geom')">
+    <span>📏</span> Геом. вероятность
+    <span class="nav-badge">1.4</span>
+  </a>
+
+  <div class="nav-section">Раздел 2</div>
+  <a class="nav-item" onclick="show('mult')">
+    <span>✖️</span> Умножение / Сложение
+    <span class="nav-badge">2.1–2.2</span>
+  </a>
+  <a class="nav-item" onclick="show('full')">
+    <span>🔬</span> Байес
+    <span class="nav-badge">2.3–2.4</span>
+  </a>
+  <a class="nav-item" onclick="show('bern')">
+    <span>🔁</span> Схема Бернулли
+    <span class="nav-badge">2.5</span>
+  </a>
+</aside>
+
+<main class="main">
+
+<!-- ═══ 1.1 КОМБИНАТОРИКА ═══ -->
+<div class="section active" id="comb">
+  <div class="page-header">
+    <div class="page-tag">Раздел 1.1</div>
+    <div class="page-title">Комбинаторика</div>
+    <div class="page-desc">Подсчёт числа способов выбрать, расставить или распределить объекты</div>
+  </div>
+
+  <h3>Три основных формулы</h3>
+  <div class="grid3">
+    <div class="formula-card">
+      <div class="formula-name">Сочетание</div>
+      <div class="formula-math">C(n,k) = n! / k!(n−k)!</div>
+      <div class="formula-desc">Выбрать k из n. Порядок <strong>не важен</strong>.<br><em>«кто», но не «в каком порядке»</em></div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Размещение</div>
+      <div class="formula-math">A(n,k) = n! / (n−k)!</div>
+      <div class="formula-desc">Выбрать k из n с порядком. <strong>Порядок важен</strong>.<br><em>«кто и на каком месте»</em></div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Перестановка</div>
+      <div class="formula-math">P(n) = n!</div>
+      <div class="formula-desc">Расставить <strong>все</strong> n объектов в ряд.<br><em>«все, в любом порядке»</em></div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">ℹ</span>
+    <span>n! (факториал) = 1·2·3·...·n. Например: 4! = 24, 5! = 120. По определению: <strong>0! = 1</strong></span>
+  </div>
+
+  <h3>Алгоритм выбора формулы</h3>
+  <div class="algo-card">
+    <div class="algo-q">❶ Важен ли порядок?</div>
+    <div class="algo-branch"><span class="algo-arrow">Нет →</span><span>Используем <span class="algo-result">Сочетание C(n,k)</span> — «выбрать команду», «выбрать лотерейные номера»</span></div>
+    <div class="algo-branch"><span class="algo-arrow">Да →</span><span>Переходим к вопросу ❷</span></div>
+    <div class="algo-q" style="margin-top:1rem">❷ Берём всех или часть?</div>
+    <div class="algo-branch"><span class="algo-arrow">Часть →</span><span>Используем <span class="algo-result">Размещение A(n,k)</span> — «распределить медали», «составить пароль»</span></div>
+    <div class="algo-branch"><span class="algo-arrow">Всех →</span><span>Используем <span class="algo-result">Перестановку P(n)</span> — «в каком порядке стоять в очереди»</span></div>
+  </div>
+
+  <h3>Правила комбинаторики</h3>
+  <div class="grid2">
+    <div class="formula-card">
+      <div class="formula-name">Правило И (умножение)</div>
+      <div class="formula-math">N = N₁ · N₂ · ... · Nₖ</div>
+      <div class="formula-desc">Нужно выполнить действие 1 <strong>И</strong> действие 2 — перемножаем число способов.</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Правило ИЛИ (сложение)</div>
+      <div class="formula-math">N = N₁ + N₂ + ... + Nₖ</div>
+      <div class="formula-desc">Подходит действие 1 <strong>ИЛИ</strong> действие 2 — складываем число способов.</div>
+    </div>
+  </div>
+
+  <h3>Разбор задач по шагам</h3>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🏅</div>
+      <div>
+        <div class="solver-label">Задача 1 — Размещение</div>
+        <div class="solver-task">8 команд соревнуются в финале. Разыгрываются три медали: золотая, серебряная и бронзовая. Сколькими способами могут быть распределены медали?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content"><span class="highlight">Порядок важен?</span> Да — золото ≠ серебро. Берём часть (3 из 8) → <span class="highlight">Размещение A(n,k)</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Записываем формулу: <span class="math">A(8,3) = 8! / (8−3)! = 8! / 5!</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content">Сокращаем: <span class="math">8·7·6·5! / 5! = 8·7·6 = 336</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: A(8,3) = 336 способов</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🏆</div>
+      <div>
+        <div class="solver-label">Задача 2 — Сочетание</div>
+        <div class="solver-task">8 команд в полуфинале. В финал попадают 3 команды (без распределения мест). Сколькими способами определятся участники финала?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content"><span class="highlight">Порядок важен?</span> Нет — важно только кто попал, без мест → <span class="highlight">Сочетание C(n,k)</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Записываем: <span class="math">C(8,3) = 8! / (3! · 5!)</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content">Считаем: <span class="math">(8·7·6) / (3·2·1) = 336 / 6 = 56</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: C(8,3) = 56 способов</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">👥</div>
+      <div>
+        <div class="solver-label">Задача 3 — Правило И/ИЛИ</div>
+        <div class="solver-task">Группа: 10 юношей и 13 девушек. Сколькими способами выбрать 2 юношей И 2 девушек для олимпиады?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">«2 юноши» — порядок не важен → <span class="math">C(10,2) = 10·9/2 = 45</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">«2 девушки» — порядок не важен → <span class="math">C(13,2) = 13·12/2 = 78</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content">Нужно И юношей, И девушек → <span class="highlight">правило умножения</span>: <span class="math">45 · 78 = 3510</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: 3510 способов</div>
+  </div>
+</div>
+
+<!-- ═══ 1.2 СЛУЧАЙНЫЕ СОБЫТИЯ ═══ -->
+<div class="section" id="events">
+  <div class="page-header">
+    <div class="page-tag">Раздел 1.2</div>
+    <div class="page-title">Случайные события</div>
+    <div class="page-desc">Классическое определение вероятности и алгебра событий</div>
+  </div>
+
+  <h3>Основные понятия</h3>
+  <table class="tbl">
+    <tr><th>Понятие</th><th>Определение</th><th>Пример</th></tr>
+    <tr><td><strong>Опыт / испытание</strong></td><td>Ситуация с несколькими возможными исходами</td><td>Бросок кубика</td></tr>
+    <tr><td><strong>Элементарное событие</strong></td><td>Один конкретный исход опыта</td><td>Выпало «3»</td></tr>
+    <tr><td><strong>Пространство Ω</strong></td><td>Полный набор всех элементарных событий</td><td>{1,2,3,4,5,6}</td></tr>
+    <tr><td><strong>Случайное событие</strong></td><td>Подмножество пространства — может произойти или нет</td><td>«Чётное число»</td></tr>
+  </table>
+
+  <h3>Типы событий</h3>
+  <div class="grid2">
+    <div>
+      <span class="tag green">Достоверное Ω</span> — всегда происходит<br>
+      <span class="tag red">Невозможное ∅</span> — никогда не происходит<br>
+      <span class="tag purple">Случайное</span> — может произойти или нет
+    </div>
+    <div>
+      <span class="tag blue">Равновозможные</span> — одинаковые шансы<br>
+      <span class="tag amber">Несовместные</span> — не могут быть одновременно<br>
+      <span class="tag purple">Совместные</span> — могут произойти вместе
+    </div>
+  </div>
+
+  <h3>Классическое определение вероятности</h3>
+  <div class="formula-card">
+    <div class="formula-name">Формула классической вероятности</div>
+    <div class="formula-math">P(A) = m / n</div>
+    <div class="formula-desc">
+      <strong>m</strong> — число исходов, благоприятствующих A<br>
+      <strong>n</strong> — общее число равновозможных исходов<br>
+      Применимо только если все исходы <em>равновозможны</em> и их число <em>конечно</em>
+    </div>
+  </div>
+
+  <div class="qref">
+    <div class="qref-title">Свойства вероятности</div>
+    <div class="qref-row"><span class="qref-label">Диапазон значений</span><span class="qref-val">0 ≤ P(A) ≤ 1</span></div>
+    <div class="qref-row"><span class="qref-label">Достоверное событие</span><span class="qref-val">P(Ω) = 1</span></div>
+    <div class="qref-row"><span class="qref-label">Невозможное событие</span><span class="qref-val">P(∅) = 0</span></div>
+    <div class="qref-row"><span class="qref-label">Противоположное событие</span><span class="qref-val">P(Ā) = 1 − P(A)</span></div>
+  </div>
+
+  <h3>Разбор задач по шагам</h3>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🃏</div>
+      <div>
+        <div class="solver-label">Задача — классическая вероятность</div>
+        <div class="solver-task">Из колоды 36 карт вынимают одну. Найти вероятность того, что это туз.</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Общее число исходов: <span class="math">n = 36</span> (равновозможны → можно применять формулу)</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Число благоприятных (тузов в колоде 36 карт): <span class="math">m = 4</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content"><span class="math">P(A) = 4 / 36 = 1/9 ≈ 0.111</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: P = 1/9 ≈ 0.111</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">⚪</div>
+      <div>
+        <div class="solver-label">Задача — с комбинаторикой</div>
+        <div class="solver-task">В урне 5 белых и 3 чёрных шара. Вынимают 2 шара. Найти вероятность, что оба белые.</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Общее число способов вынуть 2 из 8: <span class="math">n = C(8,2) = 28</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Благоприятных — выбрать 2 белых из 5: <span class="math">m = C(5,2) = 10</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content"><span class="math">P(A) = 10 / 28 = 5/14 ≈ 0.357</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: P = 5/14 ≈ 0.357</div>
+  </div>
+</div>
+
+<!-- ═══ 1.4 ГЕОМЕТРИЧЕСКАЯ ВЕРОЯТНОСТЬ ═══ -->
+<div class="section" id="geom">
+  <div class="page-header">
+    <div class="page-tag">Раздел 1.4</div>
+    <div class="page-title">Геометрическая вероятность</div>
+    <div class="page-desc">Когда исходов бесконечно много — считаем через меры областей</div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠</span>
+    <span>Классическое определение <strong>не работает</strong> при бесконечном числе исходов (точка на отрезке, случайный момент времени). Тогда используем геометрическую вероятность.</span>
+  </div>
+
+  <h3>Формулы</h3>
+  <div class="formula-card">
+    <div class="formula-name">Универсальная форма</div>
+    <div class="formula-math">P(A) = mes(D) / mes(Ω)</div>
+    <div class="formula-desc">mes — мера области (длина, площадь или объём). D — благоприятная область, Ω — вся область.</div>
+  </div>
+  <div class="grid3">
+    <div class="formula-card">
+      <div class="formula-name">На прямой</div>
+      <div class="formula-math">P = l_D / l_Ω</div>
+      <div class="formula-desc">Отношение длин отрезков</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">На плоскости</div>
+      <div class="formula-math">P = S_D / S_Ω</div>
+      <div class="formula-desc">Отношение площадей</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">В пространстве</div>
+      <div class="formula-math">P = V_D / V_Ω</div>
+      <div class="formula-desc">Отношение объёмов</div>
+    </div>
+  </div>
+
+  <h3>Разбор задач по шагам</h3>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">📏</div>
+      <div>
+        <div class="solver-label">Задача 1 — линейная</div>
+        <div class="solver-task">На отрезке [0; 1] наудачу выбирают точку. Какова вероятность, что она попадёт в промежуток [0.4; 0.7]?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Определяем меру: задача на прямой → используем <span class="highlight">длины</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Длина всей области: <span class="math">l_Ω = 1 − 0 = 1</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content">Длина благоприятной области: <span class="math">l_D = 0.7 − 0.4 = 0.3</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">4</div></div>
+        <div class="step-content"><span class="math">P = 0.3 / 1 = 0.3</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: P = 0.3</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">⬛</div>
+      <div>
+        <div class="solver-label">Задача 2 — площадь</div>
+        <div class="solver-task">В квадрат со стороной 4 см «бросают» точку. Внутри вписан круг радиусом 2 см. Найти вероятность попадания в круг.</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Задача на плоскости → используем <span class="highlight">площади</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Площадь квадрата: <span class="math">S_Ω = 4² = 16 см²</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content">Площадь круга: <span class="math">S_D = π·r² = π·4 ≈ 12.57 см²</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">4</div></div>
+        <div class="step-content"><span class="math">P = 4π / 16 = π/4 ≈ 0.785</span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: P = π/4 ≈ 0.785</div>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <span>Главное — правильно определить <strong>какую меру использовать</strong>. Смотри на условие: точка на отрезке → длина; попадание в фигуру → площадь; попадание в тело → объём.</span>
+  </div>
+</div>
+
+<!-- ═══ 2.1–2.2 УМНОЖЕНИЕ/СЛОЖЕНИЕ ═══ -->
+<div class="section" id="mult">
+  <div class="page-header">
+    <div class="page-tag">Раздел 2.1–2.2</div>
+    <div class="page-title">Вероятность произведения и суммы</div>
+    <div class="page-desc">Теоремы умножения и сложения для зависимых и независимых событий</div>
+  </div>
+
+  <h3>Условная вероятность</h3>
+  <div class="formula-card">
+    <div class="formula-name">Определение</div>
+    <div class="formula-math">P(B|A) = P(AB) / P(A)</div>
+    <div class="formula-desc">Вероятность B при условии, что A уже произошло. Читается: «P B при A».</div>
+  </div>
+
+  <h3>Теорема умножения</h3>
+  <div class="grid2">
+    <div class="formula-card">
+      <div class="formula-name">Зависимые события</div>
+      <div class="formula-math">P(AB) = P(A)·P(B|A)</div>
+      <div class="formula-desc">События зависимы, если наступление одного меняет вероятность другого.<br><em>Пример: шары без возврата</em></div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Независимые события</div>
+      <div class="formula-math">P(AB) = P(A)·P(B)</div>
+      <div class="formula-desc">Наступление одного не влияет на другое.<br><em>Пример: два разных кубика</em></div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠</span>
+    <span>Из попарной независимости событий <strong>не следует</strong> их совокупная независимость!</span>
+  </div>
+
+  <h3>Теорема сложения</h3>
+  <div class="grid2">
+    <div class="formula-card">
+      <div class="formula-name">Несовместные события</div>
+      <div class="formula-math">P(A+B) = P(A) + P(B)</div>
+      <div class="formula-desc">A и B не могут произойти одновременно.<br><em>Пример: выпала чётная ИЛИ нечётная</em></div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Совместные события</div>
+      <div class="formula-math">P(A+B) = P(A)+P(B)−P(AB)</div>
+      <div class="formula-desc">A и B могут произойти вместе — вычитаем пересечение, иначе посчитаем дважды.</div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <span><strong>Хитрость «хотя бы один»:</strong> P(хотя бы одно из n) = 1 − P(ни одного) = 1 − q₁·q₂·...·qₙ</span>
+  </div>
+
+  <h3>Разбор задач по шагам</h3>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🎯</div>
+      <div>
+        <div class="solver-label">Задача — два стрелка</div>
+        <div class="solver-task">Два стрелка стреляют по мишени. P(A₁)=0.7, P(A₂)=0.8. Найти: а) оба попали; б) оба промахнулись; в) попал хотя бы один; г) попал только один.</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">а</div></div>
+        <div class="step-content">Оба попали — события независимы → умножаем:<br><span class="math">P(A₁A₂) = 0.7 · 0.8 = <span class="ans">0.56</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">б</div></div>
+        <div class="step-content">P(промах₁) = 1−0.7=0.3; P(промах₂)=1−0.8=0.2<br><span class="math">P = 0.3 · 0.2 = <span class="ans">0.06</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">в</div></div>
+        <div class="step-content">Хотя бы один = 1 − оба промахнулись:<br><span class="math">P = 1 − 0.06 = <span class="ans">0.94</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">г</div></div>
+        <div class="step-content">Только один = (1 попал, 2 мимо) ИЛИ (1 мимо, 2 попал):<br><span class="math">P = 0.7·0.2 + 0.3·0.8 = 0.14+0.24 = <span class="ans">0.38</span></span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ а) 0.56  б) 0.06  в) 0.94  г) 0.38</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">⚪</div>
+      <div>
+        <div class="solver-label">Задача — шары без возврата (зависимые)</div>
+        <div class="solver-task">В ящике 6 белых и 8 красных шаров. Поочерёдно вынимают 2 шара (без возврата). P(оба белые) = ?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Без возврата → события <span class="highlight">зависимые</span>, используем P(AB) = P(A)·P(B|A)</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">P(первый белый) = <span class="math">6/14 = 3/7</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content">P(второй белый | первый белый) = <span class="math">5/13</span> (осталось 5 белых из 13)</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">4</div></div>
+        <div class="step-content"><span class="math">P = (3/7) · (5/13) = 15/91 ≈ <span class="ans">0.165</span></span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ Ответ: P = 15/91 ≈ 0.165</div>
+  </div>
+</div>
+
+<!-- ═══ 2.3–2.4 БАЙЕС ═══ -->
+<div class="section" id="full">
+  <div class="page-header">
+    <div class="page-tag">Раздел 2.3–2.4</div>
+    <div class="page-title">Формула полной вероятности и формула Байеса</div>
+    <div class="page-desc">Работа с гипотезами — причинами, через которые может наступить событие</div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">ℹ</span>
+    <span>Используем, когда событие A может наступить через одну из нескольких <strong>гипотез H₁, H₂, ..., Hₙ</strong> — взаимно исключающих и исчерпывающих причин.</span>
+  </div>
+
+  <h3>Условие полной группы гипотез</h3>
+  <div class="formula-card">
+    <div class="formula-name">Проверка гипотез (обязательно!)</div>
+    <div class="formula-math">P(H₁) + P(H₂) + ... + P(Hₙ) = 1</div>
+    <div class="formula-desc">Гипотезы должны быть несовместны и образовывать полную группу. Если сумма ≠ 1 — ошибка в условии.</div>
+  </div>
+
+  <h3>Формулы</h3>
+  <div class="grid2">
+    <div class="formula-card">
+      <div class="formula-name">Полная вероятность — ДО опыта</div>
+      <div class="formula-math">P(A) = Σ P(Hₖ)·P(A|Hₖ)</div>
+      <div class="formula-desc">Зная вероятности каждой причины и вероятность A при этой причине — находим P(A) в целом.</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Формула Байеса — ПОСЛЕ опыта</div>
+      <div class="formula-math">P(Hₖ|A) = P(Hₖ)·P(A|Hₖ) / P(A)</div>
+      <div class="formula-desc">A уже произошло — какова вероятность, что причиной была гипотеза Hₖ? Числитель — конкретная гипотеза, знаменатель — P(A) из формулы выше.</div>
+    </div>
+  </div>
+
+  <h3>Алгоритм решения</h3>
+  <div class="algo-card">
+    <div class="algo-branch"><span class="algo-arrow">①</span> Выделить гипотезы H₁...Hₙ (взаимоисключающие причины)</div>
+    <div class="algo-branch"><span class="algo-arrow">②</span> Записать априорные вероятности P(Hₖ) — до опыта</div>
+    <div class="algo-branch"><span class="algo-arrow">③</span> Записать условные вероятности P(A|Hₖ) — вероятность A при каждой гипотезе</div>
+    <div class="algo-branch"><span class="algo-arrow">④</span> Контроль: проверить, что ΣP(Hₖ) = 1</div>
+    <div class="algo-branch"><span class="algo-arrow">⑤</span> Вычислить P(A) по формуле полной вероятности</div>
+    <div class="algo-branch"><span class="algo-arrow">⑥</span> Если нужно — применить формулу Байеса для нужной гипотезы</div>
+  </div>
+
+  <h3>Разбор задач по шагам</h3>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🔬</div>
+      <div>
+        <div class="solver-label">Задача — контроль изделий</div>
+        <div class="solver-task">90% изделий стандартны, 10% — нет. Стандартное пройдёт контроль с P=0.96; нестандартное — с P=0.06. а) Найти P(пройдёт контроль). б) Изделие прошло — P(что оно стандартное)?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Гипотезы: <span class="highlight">H₁ = стандартное</span>, <span class="highlight">H₂ = нестандартное</span><br><span class="math">P(H₁)=0.9; P(H₂)=0.1. Контроль: 0.9+0.1=1 ✓</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">Условные вероятности:<br><span class="math">P(A|H₁)=0.96; P(A|H₂)=0.06</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">а</div></div>
+        <div class="step-content">Полная вероятность:<br><span class="math">P(A) = 0.9·0.96 + 0.1·0.06 = 0.864 + 0.006 = <span class="ans">0.87</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">б</div></div>
+        <div class="step-content">Формула Байеса:<br><span class="math">P(H₁|A) = (0.9·0.96) / 0.87 = 0.864 / 0.87 ≈ <span class="ans">0.993</span></span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ а) P = 0.87   б) P(стандарт | прошло) ≈ 0.993</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">⚱️</div>
+      <div>
+        <div class="solver-label">Задача — две урны</div>
+        <div class="solver-task">Из урны 1 (5 бел, 3 чёрн) переложили 2 шара в урну 2 (2 бел, 6 чёрн). Затем из урны 2 извлекли 1 шар. а) P(белый)? б) Шар оказался белым — P(переложили разного цвета)?</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">Гипотезы о составе переложенных шаров:<br>
+        <span class="math">H₁</span>: 2 белых — <span class="math">P(H₁) = C(5,2)/C(8,2) = 10/28 = 5/14</span><br>
+        <span class="math">H₂</span>: 2 чёрных — <span class="math">P(H₂) = C(3,2)/C(8,2) = 3/28</span><br>
+        <span class="math">H₃</span>: 1 бел + 1 чёрн — <span class="math">P(H₃) = C(5,1)·C(3,1)/C(8,2) = 15/28</span><br>
+        Контроль: <span class="math">(10+3+15)/28 = 28/28 = 1 ✓</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content">В урне 2 стало 10 шаров. Условные вероятности достать белый:<br>
+        <span class="math">P(A|H₁) = 4/10</span> (стало 4 белых)<br>
+        <span class="math">P(A|H₂) = 2/10</span> (осталось 2 белых)<br>
+        <span class="math">P(A|H₃) = 3/10</span> (стало 3 белых)</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">а</div></div>
+        <div class="step-content"><span class="math">P(A) = (4/10)·(10/28) + (2/10)·(3/28) + (3/10)·(15/28)</span><br><span class="math">= 40/280 + 6/280 + 45/280 = 91/280 = 13/40 = <span class="ans">0.325</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">б</div></div>
+        <div class="step-content">Байес для H₃ (разного цвета):<br><span class="math">P(H₃|A) = P(H₃)·P(A|H₃) / P(A) = (15/28)·(3/10) / (13/40)</span><br><span class="math">= (45/280) / (91/280) = 45/91 ≈ <span class="ans">0.495</span></span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ а) P ≈ 0.325   б) P(разного цвета | белый) = 45/91 ≈ 0.495</div>
+  </div>
+</div>
+
+<!-- ═══ 2.5 БЕРНУЛЛИ ═══ -->
+<div class="section" id="bern">
+  <div class="page-header">
+    <div class="page-tag">Раздел 2.5</div>
+    <div class="page-title">Схема Бернулли</div>
+    <div class="page-desc">Серия независимых испытаний с постоянной вероятностью успеха</div>
+  </div>
+
+  <h3>Три условия схемы Бернулли</h3>
+  <div class="grid3">
+    <div class="formula-card" style="border-left-color:var(--green)">
+      <div class="formula-name" style="color:var(--green)">Независимость</div>
+      <div class="formula-desc">Исход каждого испытания не зависит от предыдущих</div>
+    </div>
+    <div class="formula-card" style="border-left-color:var(--green)">
+      <div class="formula-name" style="color:var(--green)">Два исхода</div>
+      <div class="formula-desc">Только «успех» (p) и «неудача» (q = 1−p)</div>
+    </div>
+    <div class="formula-card" style="border-left-color:var(--green)">
+      <div class="formula-name" style="color:var(--green)">Постоянство</div>
+      <div class="formula-desc">Вероятность p одинакова для каждого испытания</div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠</span>
+    <span>Если у разных испытаний разная вероятность — схема Бернулли <strong>не применяется</strong>. Считать через обычное умножение для независимых событий.</span>
+  </div>
+
+  <h3>Формула Бернулли</h3>
+  <div class="formula-card">
+    <div class="formula-name">Вероятность ровно k успехов из n испытаний</div>
+    <div class="formula-math">P(k) = C(n,k) · pᵏ · qⁿ⁻ᵏ</div>
+    <div class="formula-desc">
+      <strong>n</strong> — число испытаний &nbsp;|&nbsp; <strong>k</strong> — нужное число успехов<br>
+      <strong>p</strong> — вероятность успеха &nbsp;|&nbsp; <strong>q = 1−p</strong> — вероятность неудачи
+    </div>
+  </div>
+
+  <div class="qref">
+    <div class="qref-title">Расшифровка множителей</div>
+    <div class="qref-row"><span class="qref-label">C(n,k)</span><span class="qref-val">число способов разместить k успехов среди n испытаний</span></div>
+    <div class="qref-row"><span class="qref-label">pᵏ</span><span class="qref-val">вероятность k успехов подряд</span></div>
+    <div class="qref-row"><span class="qref-label">qⁿ⁻ᵏ</span><span class="qref-val">вероятность (n−k) неудач подряд</span></div>
+  </div>
+
+  <h3>Таблица типов задач</h3>
+  <table class="tbl">
+    <tr><th>Формулировка</th><th>Формула</th><th>Примечание</th></tr>
+    <tr><td>«ровно k раз»</td><td class="mono">P(k) = C(n,k)·pᵏ·qⁿ⁻ᵏ</td><td>Прямое применение</td></tr>
+    <tr><td>«хотя бы один» (≥1)</td><td class="mono">1 − P(0) = 1 − qⁿ</td><td>Через дополнение</td></tr>
+    <tr><td>«не менее k» (≥k)</td><td class="mono">P(k) + P(k+1) + ... + P(n)</td><td>Сумма хвоста</td></tr>
+    <tr><td>«не более k» (≤k)</td><td class="mono">P(0) + P(1) + ... + P(k)</td><td>Сумма с начала</td></tr>
+  </table>
+
+  <div class="callout ok">
+    <span class="callout-icon">✓</span>
+    <span>Проверка: P(0) + P(1) + ... + P(n) = 1. Если сумма ≠ 1 — где-то ошибка в расчётах.</span>
+  </div>
+
+  <h3>Разбор задач по шагам</h3>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🎲</div>
+      <div>
+        <div class="solver-label">Задача 1 — ровно k успехов</div>
+        <div class="solver-task">Производят 4 выстрела, вероятность попадания p=0.3 при каждом. Найти P(0), P(1), P(2), P(3) попаданий.</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">↑</div></div>
+        <div class="step-content">Данные: <span class="math">n=4, p=0.3, q=0.7</span>. Три условия Бернулли выполнены ✓</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">0</div></div>
+        <div class="step-content"><span class="math">P(0) = C(4,0)·0.3⁰·0.7⁴ = 1·1·0.2401 = <span class="ans">0.240</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content"><span class="math">P(1) = C(4,1)·0.3¹·0.7³ = 4·0.3·0.343 = <span class="ans">0.412</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content"><span class="math">P(2) = C(4,2)·0.3²·0.7² = 6·0.09·0.49 = <span class="ans">0.265</span></span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content"><span class="math">P(3) = C(4,3)·0.3³·0.7¹ = 4·0.027·0.7 = <span class="ans">0.076</span></span><br>Контроль: 0.240+0.412+0.265+0.076+P(4)≈1 ✓</div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ P(0)=0.240  P(1)=0.412  P(2)=0.265  P(3)=0.076</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🎲</div>
+      <div>
+        <div class="solver-label">Задача 2 — не менее k (хвост)</div>
+        <div class="solver-task">5 бросков кубика. Найти вероятность того, что шестёрка выпадет не менее 3 раз.</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">↑</div></div>
+        <div class="step-content">Данные: <span class="math">n=5, p=1/6≈0.167, q=5/6≈0.833</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content">«Не менее 3» = P(3) + P(4) + P(5)</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content"><span class="math">P(3) = C(5,3)·(1/6)³·(5/6)² = 10·(1/216)·(25/36) ≈ 0.032</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content"><span class="math">P(4) = C(5,4)·(1/6)⁴·(5/6)¹ = 5·(1/1296)·(5/6) ≈ 0.003</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">4</div></div>
+        <div class="step-content"><span class="math">P(5) = C(5,5)·(1/6)⁵ = 1·(1/7776) ≈ 0.0001</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">5</div></div>
+        <div class="step-content"><span class="math">P(≥3) = 0.032 + 0.003 + 0.0001 ≈ <span class="ans">0.035</span></span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ P(≥3) ≈ 0.035</div>
+  </div>
+
+  <div class="solver">
+    <div class="solver-header">
+      <div class="solver-icon">🏹</div>
+      <div>
+        <div class="solver-label">Задача 3 — хотя бы один</div>
+        <div class="solver-task">Стрелок попадает в мишень с вероятностью p=0.8. Производится 5 выстрелов. Найти P(хотя бы одного попадания).</div>
+      </div>
+    </div>
+    <div class="solver-body">
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">1</div></div>
+        <div class="step-content"><span class="highlight">«Хотя бы одно»</span> — считаем через дополнение: <span class="math">P = 1 − P(0)</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">2</div></div>
+        <div class="step-content"><span class="math">P(0) = C(5,0)·0.8⁰·0.2⁵ = 1·1·0.00032 = 0.00032</span></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num-col"><div class="step-bubble">3</div></div>
+        <div class="step-content"><span class="math">P(≥1) = 1 − 0.00032 = <span class="ans">0.99968</span></span></div>
+      </div>
+    </div>
+    <div class="solver-answer">✓ P(хотя бы одно попадание) ≈ 0.9997</div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function toggleMenu() {
+  const sidebar = document.getElementById('sidebar');
+
+  if (sidebar.style.display === 'block') {
+    sidebar.style.display = 'none';
+  } else {
+    sidebar.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
