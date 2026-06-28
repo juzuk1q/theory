@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Метрики ПО — Шпаргалка к экзамену</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg:       #0f1117;
+    --bg2:      #181c26;
+    --bg3:      #1e2332;
+    --border:   #2a2f42;
+    --text:     #e8eaf0;
+    --muted:    #8891a8;
+    --accent:   #6c8fff;
+    --accent2:  #50e3c2;
+    --accent3:  #ff7c5c;
+    --accent4:  #c084fc;
+    --accent5:  #fbbf24;
+    --mono:     'JetBrains Mono', monospace;
+    --sans:     'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ───────────── HEADER ───────────── */
+  header {
+    background: linear-gradient(135deg, #0f1117 0%, #1a1f35 60%, #0f1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(108,143,255,.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(80,227,194,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(108,143,255,.12);
+    border: 1px solid rgba(108,143,255,.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  header h1 span { color: var(--accent); }
+  header p {
+    color: var(--muted);
+    font-size: 13px;
+    max-width: 520px;
+  }
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -.03em;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  /* ───────────── NAV TABS ───────────── */
+  nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 14px 18px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ───────────── MAIN LAYOUT ───────────── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ───────────── SECTION HEADER ───────────── */
+  .sec-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ───────────── CARD GRID ───────────── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .grid-1 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+
+  /* ───────────── METRIC CARD ───────────── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color .2s, transform .15s;
+  }
+  .card:hover {
+    border-color: #3a4060;
+    transform: translateY(-1px);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 0;
+  }
+  .num-badge {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+  .card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .card-en {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .card-body { padding: 12px 16px 16px; }
+
+  /* ───────────── FORMULA ───────────── */
+  .formula {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.8;
+  }
+  .formula .var { color: var(--accent2); }
+  .formula .op  { color: var(--accent3); }
+  .formula .num { color: var(--accent5); }
+  .formula .fn  { color: var(--accent); }
+
+  /* ───────────── VAR TABLE ───────────── */
+  .vars { margin-top: 6px; }
+  .var-row {
+    display: flex;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    align-items: baseline;
+  }
+  .var-row:last-child { border-bottom: none; }
+  .var-sym {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 52px;
+    flex-shrink: 0;
+  }
+  .var-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ───────────── ACCENT COLORS ───────────── */
+  .c-blue  .num-badge { background: rgba(108,143,255,.15); color: var(--accent); }
+  .c-teal  .num-badge { background: rgba(80,227,194,.15);  color: var(--accent2); }
+  .c-red   .num-badge { background: rgba(255,124,92,.15);  color: var(--accent3); }
+  .c-purple .num-badge{ background: rgba(192,132,252,.15); color: var(--accent4); }
+  .c-gold  .num-badge { background: rgba(251,191,36,.15);  color: var(--accent5); }
+
+  .c-blue  { border-top: 2px solid rgba(108,143,255,.4); }
+  .c-teal  { border-top: 2px solid rgba(80,227,194,.4); }
+  .c-red   { border-top: 2px solid rgba(255,124,92,.4); }
+  .c-purple{ border-top: 2px solid rgba(192,132,252,.4); }
+  .c-gold  { border-top: 2px solid rgba(251,191,36,.4); }
+
+  .c-blue  .var-sym  { color: var(--accent); }
+  .c-teal  .var-sym  { color: var(--accent2); }
+  .c-red   .var-sym  { color: var(--accent3); }
+  .c-purple .var-sym { color: var(--accent4); }
+  .c-gold  .var-sym  { color: var(--accent5); }
+
+  /* ───────────── NOTE BOX ───────────── */
+  .note {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.6;
+    border-left: 3px solid;
+  }
+  .note-blue   { background: rgba(108,143,255,.07); border-color: var(--accent); }
+  .note-teal   { background: rgba(80,227,194,.07);  border-color: var(--accent2); }
+  .note-red    { background: rgba(255,124,92,.07);  border-color: var(--accent3); }
+  .note-purple { background: rgba(192,132,252,.07); border-color: var(--accent4); }
+  .note-gold   { background: rgba(251,191,36,.07);  border-color: var(--accent5); }
+  .note strong { color: var(--text); }
+
+  /* ───────────── TABLE ───────────── */
+  .mtable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .mtable th {
+    background: var(--bg3);
+    color: var(--muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 12px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    font-size: 11px;
+  }
+  .mtable td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .mtable tr:last-child td { border-bottom: none; }
+  .mtable tr:hover td { background: rgba(255,255,255,.02); }
+  .mtable td:first-child {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* ───────────── QUICK-REF ───────────── */
+  .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .qr-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .qr-card:hover { background: var(--bg3); border-color: #3a4060; }
+  .qr-num { font-size: 10px; font-weight: 700; font-family: var(--mono); color: var(--muted); margin-bottom: 4px; }
+  .qr-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+  .qr-formula {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    background: var(--bg3);
+    border-radius: 5px;
+    padding: 4px 7px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ───────────── CHAPIN TABLE ───────────── */
+  .chapin-groups {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .cg {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid var(--border);
+  }
+  .cg-letter {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .cg-weight { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .cg-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ───────────── SCALE BAR ───────────── */
+  .scale { margin-top: 10px; }
+  .scale-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #ff4545 0%, #fbbf24 40%, #50e3c2 70%, #6c8fff 100%);
+    margin: 6px 0;
+    position: relative;
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .scale-labels span { font-family: var(--mono); font-weight: 600; }
+
+  /* ───────────── RESPONSIVE ───────────── */
+  @media(max-width: 640px) {
+    header { padding: 24px 16px 20px; }
+    main { padding: 16px 12px 40px; }
+    nav { padding: 0 12px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .chapin-groups { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">📚 МДК 02.02 · Управление проектами</div>
+  <h1>Метрики <span>программного кода</span></h1>
+  <p>Шпаргалка к экзамену — все 13 метрик с формулами, переменными и пояснениями</p>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">13</div><div class="stat-label">метрик</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">разделов</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">группы Чепина</div></div>
+  </div>
+</header>
+
+<nav>
+  <div class="tab active" onclick="showTab('all')">🗂 Все</div>
+  <div class="tab" onclick="showTab('halstead')">⚗️ Холстед</div>
+  <div class="tab" onclick="showTab('chapin')">📊 Чепин</div>
+  <div class="tab" onclick="showTab('size')">📏 Размер &amp; Сложность</div>
+  <div class="tab" onclick="showTab('oo')">🧩 ОО-метрики</div>
+  <div class="tab" onclick="showTab('quick')">⚡ Быстрый повтор</div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════ ALL ═══════════════════════ -->
+<div class="section active" id="tab-all">
+
+  <!-- ХАЛСТЕД -->
+  <div class="sec-title">Метрики Холстеда (Halstead)</div>
+  <div class="grid">
+
+    <div class="card c-blue">
+      <div class="card-head">
+        <div class="num-badge">11</div>
+        <div>
+          <div class="card-name">Словарь программы</div>
+          <div class="card-en">Vocabulary</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">n</span> <span class="op">=</span> <span class="var">n₁</span> <span class="op">+</span> <span class="var">n₂</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">n₁</span><span class="var-desc">число <strong>уникальных операторов</strong> (+, -, if, while, …)</span></div>
+          <div class="var-row"><span class="var-sym">n₂</span><span class="var-desc">число <strong>уникальных операндов</strong> (переменные, константы)</span></div>
+        </div>
+        <div class="note note-blue">Словарь — это сколько «разных слов» знает программа.</div>
+      </div>
+    </div>
+
+    <div class="card c-blue">
+      <div class="card-head">
+        <div class="num-badge">2</div>
+        <div>
+          <div class="card-name">Длина программы</div>
+          <div class="card-en">Length</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">N</span> <span class="op">=</span> <span class="var">N₁</span> <span class="op">+</span> <span class="var">N₂</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">N₁</span><span class="var-desc">общее число <strong>вхождений операторов</strong> (каждое использование)</span></div>
+          <div class="var-row"><span class="var-sym">N₂</span><span class="var-desc">общее число <strong>вхождений операндов</strong></span></div>
+        </div>
+        <div class="note note-blue">Длина — сколько «слов» написано, с повторами.</div>
+      </div>
+    </div>
+
+    <div class="card c-teal">
+      <div class="card-head">
+        <div class="num-badge">9</div>
+        <div>
+          <div class="card-name">Объём программы</div>
+          <div class="card-en">Volume</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">V</span> <span class="op">=</span> <span class="var">N</span> <span class="op">×</span> <span class="fn">log₂</span>(<span class="var">n</span>)</div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">N</span><span class="var-desc">длина программы</span></div>
+          <div class="var-row"><span class="var-sym">n</span><span class="var-desc">словарь программы</span></div>
+        </div>
+        <div class="note note-teal">Измеряется в <strong>битах</strong>. Количество информации, необходимой для записи программы.</div>
+      </div>
+    </div>
+
+    <div class="card c-teal">
+      <div class="card-head">
+        <div class="num-badge">8</div>
+        <div>
+          <div class="card-name">Метрика Холстеда (доп.)</div>
+          <div class="card-en">Difficulty &amp; Effort</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">D</span> <span class="op">=</span> (<span class="var">n₁</span><span class="op">/</span><span class="num">2</span>) <span class="op">×</span> (<span class="var">N₂</span><span class="op">/</span><span class="var">n₂</span>)
+<span class="var">E</span> <span class="op">=</span> <span class="var">D</span> <span class="op">×</span> <span class="var">V</span>
+<span class="var">T</span> <span class="op">=</span> <span class="var">E</span> <span class="op">/</span> <span class="num">18</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">D</span><span class="var-desc">сложность (трудность понимания)</span></div>
+          <div class="var-row"><span class="var-sym">E</span><span class="var-desc">усилия на разработку (элементарные действия)</span></div>
+          <div class="var-row"><span class="var-sym">T</span><span class="var-desc">время разработки в секундах (18 = психол. константа)</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ЧЕПИН -->
+  <div class="sec-title">Метрика Чепина (Chapin)</div>
+  <div class="grid grid-1">
+
+    <div class="card c-purple">
+      <div class="card-head">
+        <div class="num-badge">6</div>
+        <div>
+          <div class="card-name">Метрика ввода-вывода Чепина</div>
+          <div class="card-en">Chapin's I/O metric</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">Q</span> <span class="op">=</span> <span class="var">a₁</span><span class="var">P</span> <span class="op">+</span> <span class="var">a₂</span><span class="var">M</span> <span class="op">+</span> <span class="var">a₃</span><span class="var">C</span> <span class="op">+</span> <span class="var">a₄</span><span class="var">T</span>
+
+<span class="fn">Стандартные коэффициенты:</span>
+<span class="var">Q</span> <span class="op">=</span> <span class="num">1</span><span class="var">P</span> <span class="op">+</span> <span class="num">2</span><span class="var">M</span> <span class="op">+</span> <span class="num">3</span><span class="var">C</span> <span class="op">+</span> <span class="num">0.5</span><span class="var">T</span></div>
+
+        <div class="chapin-groups">
+          <div class="cg">
+            <div class="cg-letter" style="color:var(--accent)">P</div>
+            <div class="cg-weight">Вес: 1</div>
+            <div class="cg-desc">Переменные, используемые только для <strong>ввода данных</strong></div>
+          </div>
+          <div class="cg">
+            <div class="cg-letter" style="color:var(--accent2)">M</div>
+            <div class="cg-weight">Вес: 2</div>
+            <div class="cg-desc">Переменные, <strong>модифицируемые</strong> в модуле (ввод + вывод)</div>
+          </div>
+          <div class="cg">
+            <div class="cg-letter" style="color:var(--accent3)">C</div>
+            <div class="cg-weight">Вес: 3</div>
+            <div class="cg-desc"><strong>Управляющие</strong> переменные — влияют на поток выполнения</div>
+          </div>
+          <div class="cg">
+            <div class="cg-letter" style="color:var(--muted)">T</div>
+            <div class="cg-weight">Вес: 0.5</div>
+            <div class="cg-desc">Паразитные переменные — неиспользуемые, избыточные</div>
+          </div>
+        </div>
+
+        <div class="note note-purple">Оценивает <strong>информационную прочность</strong> программного модуля путём анализа характера использования переменных из списка ввода-вывода.</div>
+      </div>
+    </div>
+
+    <div class="card c-purple">
+      <div class="card-head">
+        <div class="num-badge">10</div>
+        <div>
+          <div class="card-name">Полная метрика Чепина</div>
+          <div class="card-en">Full Chapin metric</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">Q_полн</span> <span class="op">=</span> <span class="var">Q_ввода</span> <span class="op">+</span> <span class="var">Q_вывода</span></div>
+        <div class="note note-purple">Анализируется список переменных ввода <strong>и</strong> вывода по отдельности — каждый делится на P, M, C, T. Итоговый Q считается для каждого списка, затем суммируется.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- РАЗМЕР И СЛОЖНОСТЬ -->
+  <div class="sec-title">Метрики размера и сложности кода</div>
+  <div class="grid">
+
+    <div class="card c-gold">
+      <div class="card-head">
+        <div class="num-badge">5</div>
+        <div>
+          <div class="card-name">SLOC — исходные строки</div>
+          <div class="card-en">Source Lines Of Code</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">SLOC</span> <span class="op">=</span> <span class="fn">все строки кода</span></div>
+        <div class="note note-gold"><strong>Включает:</strong> исполняемые строки + комментарии + пустые строки. Считается весь исходный текст программы как есть.</div>
+      </div>
+    </div>
+
+    <div class="card c-gold">
+      <div class="card-head">
+        <div class="num-badge">4</div>
+        <div>
+          <div class="card-name">ELOC — исполняемые строки</div>
+          <div class="card-en">Executable Lines Of Code</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">ELOC</span> <span class="op">=</span> <span class="var">SLOC</span> <span class="op">−</span> <span class="var">N_ком</span> <span class="op">−</span> <span class="var">N_пуст</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">N_ком</span><span class="var-desc">строки с комментариями</span></div>
+          <div class="var-row"><span class="var-sym">N_пуст</span><span class="var-desc">пустые строки</span></div>
+        </div>
+        <div class="note note-gold">Только <strong>реально исполняемый</strong> код — без балласта комментариев и пустых строк.</div>
+      </div>
+    </div>
+
+    <div class="card c-red" style="grid-column: 1/-1;">
+      <div class="card-head">
+        <div class="num-badge">13</div>
+        <div>
+          <div class="card-name">Цикломатическая сложность (Мак-Кейба)</div>
+          <div class="card-en">McCabe's Cyclomatic Complexity</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">V(G)</span> <span class="op">=</span> <span class="var">e</span> <span class="op">−</span> <span class="var">n</span> <span class="op">+</span> <span class="num">2</span><span class="var">p</span>
+
+<span class="fn">При p = 1 (одна функция):</span>  <span class="var">V(G)</span> <span class="op">=</span> <span class="var">e</span> <span class="op">−</span> <span class="var">n</span> <span class="op">+</span> <span class="num">2</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">e</span><span class="var-desc">число <strong>дуг</strong> (рёбер) в графе потока управления</span></div>
+          <div class="var-row"><span class="var-sym">n</span><span class="var-desc">число <strong>вершин</strong> (узлов) в графе</span></div>
+          <div class="var-row"><span class="var-sym">p</span><span class="var-desc">число <strong>компонентов связности</strong> (обычно 1)</span></div>
+        </div>
+        <div class="note note-red">
+          ⚡ <strong>Быстрый способ:</strong> V(G) = количество условных операторов (if, while, for, case, &&, ||) + 1<br><br>
+          <strong>Интерпретация:</strong> 1–10 — простая (хорошо) · 11–20 — умеренная · 21–50 — сложная · &gt;50 — очень сложная
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- СТИЛИСТИКА -->
+  <div class="sec-title">Метрики стилистики и комментированности</div>
+  <div class="grid">
+
+    <div class="card c-teal">
+      <div class="card-head">
+        <div class="num-badge">12</div>
+        <div>
+          <div class="card-name">Уровень комментированности</div>
+          <div class="card-en">Comment ratio</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">C_rate</span> <span class="op">=</span> <span class="var">N_ком</span> <span class="op">/</span> <span class="var">N_стр</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">N_ком</span><span class="var-desc">число комментариев в программе</span></div>
+          <div class="var-row"><span class="var-sym">N_стр</span><span class="var-desc">число строк (операторов) исходного текста</span></div>
+        </div>
+        <div class="note note-teal">Код делится на равные части, для каждой вычисляется коэффициент — показывает <strong>плотность документирования</strong>.</div>
+      </div>
+    </div>
+
+    <div class="card c-teal">
+      <div class="card-head">
+        <div class="num-badge">7</div>
+        <div>
+          <div class="card-name">Метрика стилистики</div>
+          <div class="card-en">Style metric</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">S</span> <span class="op">=</span> <span class="fn">f</span>(<span class="var">C_rate</span>, именование, отступы, структура)</div>
+        <div class="note note-teal">Взвешенная оценка читаемости кода. Учитывает: плотность комментирования, соглашения об именовании, отступы, длину функций. <strong>Итоговый балл</strong> — сумма всех компонентов с весами.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ОО МЕТРИКИ -->
+  <div class="sec-title">Объектно-ориентированные метрики</div>
+  <div class="grid">
+
+    <div class="card c-blue">
+      <div class="card-head">
+        <div class="num-badge">1</div>
+        <div>
+          <div class="card-name">Глубина наследования</div>
+          <div class="card-en">DIT — Depth of Inheritance Tree</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">DIT</span> <span class="op">=</span> <span class="fn">max</span>(уровней наследования)</div>
+        <div class="note note-blue">DIT = 0 у корневого класса. Рекомендуется <strong>DIT ≤ 5</strong>. Чем глубже — тем сложнее понять поведение класса.</div>
+      </div>
+    </div>
+
+    <div class="card c-blue">
+      <div class="card-head">
+        <div class="num-badge">1</div>
+        <div>
+          <div class="card-name">Взаимозависимость классов</div>
+          <div class="card-en">CBO — Coupling Between Objects</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">CBO</span> <span class="op">=</span> <span class="fn">число связанных классов</span></div>
+        <div class="note note-blue">Количество классов, с которыми данный класс имеет связь. Рекомендуется <strong>CBO ≤ 5</strong>. Высокий CBO → хрупкость системы.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MI -->
+  <div class="sec-title">Индекс удобства поддержки</div>
+  <div class="grid grid-1">
+
+    <div class="card c-red">
+      <div class="card-head">
+        <div class="num-badge">3</div>
+        <div>
+          <div class="card-name">Maintainability Index (MI)</div>
+          <div class="card-en">Индекс поддерживаемости</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula"><span class="var">MI</span> <span class="op">=</span> <span class="num">171</span>
+  <span class="op">−</span> <span class="num">5.2</span> <span class="op">×</span> <span class="fn">ln</span>(<span class="var">V</span>)
+  <span class="op">−</span> <span class="num">0.23</span> <span class="op">×</span> <span class="var">V(G)</span>
+  <span class="op">−</span> <span class="num">16.2</span> <span class="op">×</span> <span class="fn">ln</span>(<span class="var">SLOC</span>)
+  <span class="op">+</span> <span class="num">50</span> <span class="op">×</span> <span class="fn">sin</span>(√(<span class="num">2.4</span> <span class="op">×</span> <span class="var">C_rate</span>))</div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">V</span><span class="var-desc">объём по Холстеду</span></div>
+          <div class="var-row"><span class="var-sym">V(G)</span><span class="var-desc">цикломатическая сложность Мак-Кейба</span></div>
+          <div class="var-row"><span class="var-sym">SLOC</span><span class="var-desc">число исходных строк кода</span></div>
+          <div class="var-row"><span class="var-sym">C_rate</span><span class="var-desc">доля комментариев (0 → 1)</span></div>
+          <div class="var-row"><span class="var-sym">ln</span><span class="var-desc">натуральный логарифм</span></div>
+        </div>
+        <div class="scale">
+          <div class="scale-bar"></div>
+          <div class="scale-labels">
+            <span>&lt;65 😱 Плохо</span>
+            <span>65–85 😐 Средне</span>
+            <span>≥85 ✅ Хорошо</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════ HALSTEAD ═══════════════════════ -->
+<div class="section" id="tab-halstead">
+  <div class="sec-title">Метрики Холстеда — полная шпаргалка</div>
+
+  <div class="note note-blue" style="margin-bottom:20px; font-size:13px; color:var(--text)">
+    <strong>Суть метрики:</strong> Холстед предложил оценивать программу как текст — через количество уникальных «слов» (словарь) и общее количество «слов» (длину). Все остальные метрики выводятся из этих двух примитивов.
+  </div>
+
+  <table class="mtable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Метрика</th>
+        <th>Формула</th>
+        <th>Что означает</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--accent)">11</td>
+        <td>Словарь <code>n</code></td>
+        <td style="font-family:var(--mono); font-size:12px; color:var(--accent2)">n = n₁ + n₂</td>
+        <td style="color:var(--muted); font-size:12px">Сколько различных операторов и операндов</td>
+      </tr>
+      <tr>
+        <td style="color:var(--accent)">2</td>
+        <td>Длина <code>N</code></td>
+        <td style="font-family:var(--mono); font-size:12px; color:var(--accent2)">N = N₁ + N₂</td>
+        <td style="color:var(--muted); font-size:12px">Суммарное использование всех операторов/операндов</td>
+      </tr>
+      <tr>
+        <td style="color:var(--accent)">9</td>
+        <td>Объём <code>V</code></td>
+        <td style="font-family:var(--mono); font-size:12px; color:var(--accent2)">V = N × log₂(n)</td>
+        <td style="color:var(--muted); font-size:12px">Информационный объём в битах</td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted)">—</td>
+        <td>Сложность <code>D</code></td>
+        <td style="font-family:var(--mono); font-size:12px; color:var(--accent2)">D = (n₁/2) × (N₂/n₂)</td>
+        <td style="color:var(--muted); font-size:12px">Трудность понимания программы</td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted)">—</td>
+        <td>Усилия <code>E</code></td>
+        <td style="font-family:var(--mono); font-size:12px; color:var(--accent2)">E = D × V</td>
+        <td style="color:var(--muted); font-size:12px">Умственные усилия на разработку</td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted)">—</td>
+        <td>Время <code>T</code></td>
+        <td style="font-family:var(--mono); font-size:12px; color:var(--accent2)">T = E / 18</td>
+        <td style="color:var(--muted); font-size:12px">Время разработки (сек), 18 — психол. константа</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+    <div class="note note-blue" style="font-size:13px">
+      <strong>Операторы</strong> — ключевые слова и символы, управляющие выполнением:<br>
+      <code style="font-size:11px; background:var(--bg3); padding:1px 4px; border-radius:3px">+  -  *  /  =  if  while  for  &&  ||  function()</code>
+    </div>
+    <div class="note note-teal" style="font-size:13px">
+      <strong>Операнды</strong> — данные, которыми оперирует программа:<br>
+      <code style="font-size:11px; background:var(--bg3); padding:1px 4px; border-radius:3px">x  y  counter  42  "hello"  PI</code>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CHAPIN ═══════════════════════ -->
+<div class="section" id="tab-chapin">
+  <div class="sec-title">Метрика Чепина — детально</div>
+
+  <div class="note note-purple" style="margin-bottom:20px; font-size:13px; color:var(--text)">
+    <strong>Суть:</strong> Оценить информационную прочность модуля через анализ того, как используются переменные. Каждая переменная из списка ввода-вывода относится ровно к одной из 4 групп.
+  </div>
+
+  <div class="grid grid-1">
+    <div class="card c-purple">
+      <div class="card-head"><div class="num-badge">6</div><div><div class="card-name">Частичная метрика (один список)</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">Q</span> <span class="op">=</span> <span class="num">1</span><span class="var">P</span> <span class="op">+</span> <span class="num">2</span><span class="var">M</span> <span class="op">+</span> <span class="num">3</span><span class="var">C</span> <span class="op">+</span> <span class="num">0.5</span><span class="var">T</span></div>
+      </div>
+    </div>
+
+    <div class="card c-purple">
+      <div class="card-head"><div class="num-badge">10</div><div><div class="card-name">Полная метрика (оба списка)</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">Q_полн</span> <span class="op">=</span> <span class="var">Q_ввода</span> <span class="op">+</span> <span class="var">Q_вывода</span></div>
+        <div class="note note-purple">Считаем Q отдельно для списка ввода и для списка вывода, затем складываем.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px">Классификация переменных (алгоритм)</div>
+  <table class="mtable">
+    <thead>
+      <tr><th>Класс</th><th>Вес</th><th>Признак</th><th>Пример</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--accent)">P</td>
+        <td style="font-family:var(--mono); color:var(--accent5)">1</td>
+        <td style="color:var(--muted); font-size:12px">Только читается, не изменяется, не управляет потоком</td>
+        <td style="font-family:var(--mono); font-size:11px; color:var(--muted)">int a = input();</td>
+      </tr>
+      <tr>
+        <td style="color:var(--accent2)">M</td>
+        <td style="font-family:var(--mono); color:var(--accent5)">2</td>
+        <td style="color:var(--muted); font-size:12px">Читается И изменяется внутри модуля (in/out)</td>
+        <td style="font-family:var(--mono); font-size:11px; color:var(--muted)">sum += a;</td>
+      </tr>
+      <tr>
+        <td style="color:var(--accent3)">C</td>
+        <td style="font-family:var(--mono); color:var(--accent5)">3</td>
+        <td style="color:var(--muted); font-size:12px">Определяет поток выполнения (условия, флаги)</td>
+        <td style="font-family:var(--mono); font-size:11px; color:var(--muted)">if (flag) { … }</td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted)">T</td>
+        <td style="font-family:var(--mono); color:var(--accent5)">0.5</td>
+        <td style="color:var(--muted); font-size:12px">Паразитная: не используется или избыточна</td>
+        <td style="font-family:var(--mono); font-size:11px; color:var(--muted)">int unused = 0;</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ SIZE ═══════════════════════ -->
+<div class="section" id="tab-size">
+  <div class="sec-title">Метрики размера и сложности кода</div>
+
+  <div class="grid">
+    <div class="card c-gold">
+      <div class="card-head"><div class="num-badge">5</div><div><div class="card-name">SLOC</div><div class="card-en">Source Lines Of Code</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">SLOC</span> = <span class="fn">всё</span> подряд</div>
+        <div class="note note-gold">Пустые строки + комментарии + код — всё считается.</div>
+      </div>
+    </div>
+    <div class="card c-gold">
+      <div class="card-head"><div class="num-badge">4</div><div><div class="card-name">ELOC</div><div class="card-en">Executable Lines Of Code</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">ELOC</span> <span class="op">=</span> <span class="var">SLOC</span> <span class="op">−</span> <span class="var">N_ком</span> <span class="op">−</span> <span class="var">N_пуст</span></div>
+        <div class="note note-gold">Только исполняемые строки без «балласта».</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-1" style="margin-top:0">
+    <div class="card c-red">
+      <div class="card-head"><div class="num-badge">13</div><div><div class="card-name">Цикломатическая сложность Мак-Кейба</div><div class="card-en">V(G) = Cyclomatic Complexity</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">V(G)</span> <span class="op">=</span> <span class="var">e</span> <span class="op">−</span> <span class="var">n</span> <span class="op">+</span> <span class="num">2</span><span class="var">p</span></div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">e</span><span class="var-desc">число дуг в графе потока управления</span></div>
+          <div class="var-row"><span class="var-sym">n</span><span class="var-desc">число вершин в графе</span></div>
+          <div class="var-row"><span class="var-sym">p</span><span class="var-desc">число компонентов связности (чаще всего p = 1)</span></div>
+        </div>
+        <div class="note note-red" style="margin-top:10px">
+          ⚡ <strong>Быстрый способ:</strong> посчитать все <code>if, else if, while, for, do, case, &&, ||</code> и прибавить 1
+        </div>
+        <table class="mtable" style="margin-top:12px">
+          <thead><tr><th>V(G)</th><th>Оценка</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--accent2)">1 – 10</td><td style="color:var(--muted); font-size:12px">✅ Простая, хорошо тестируется</td></tr>
+            <tr><td style="color:var(--accent5)">11 – 20</td><td style="color:var(--muted); font-size:12px">⚠️ Умеренная сложность</td></tr>
+            <tr><td style="color:var(--accent3)">21 – 50</td><td style="color:var(--muted); font-size:12px">🔴 Сложная, трудно тестировать</td></tr>
+            <tr><td style="color:#ff4545">&gt; 50</td><td style="color:var(--muted); font-size:12px">💀 Очень сложная, рефакторинг обязателен</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card c-red">
+      <div class="card-head"><div class="num-badge">3</div><div><div class="card-name">Maintainability Index</div><div class="card-en">Индекс удобства поддержки</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">MI</span> <span class="op">=</span> <span class="num">171</span>
+  <span class="op">−</span> <span class="num">5.2</span> <span class="op">×</span> <span class="fn">ln</span>(<span class="var">V</span>)
+  <span class="op">−</span> <span class="num">0.23</span> <span class="op">×</span> <span class="var">V(G)</span>
+  <span class="op">−</span> <span class="num">16.2</span> <span class="op">×</span> <span class="fn">ln</span>(<span class="var">SLOC</span>)
+  <span class="op">+</span> <span class="num">50</span> <span class="op">×</span> <span class="fn">sin</span>(√(<span class="num">2.4</span> <span class="op">×</span> <span class="var">C_rate</span>))</div>
+        <div class="scale" style="margin-top:12px">
+          <div style="font-size:12px; color:var(--muted); margin-bottom:6px">Шкала значений:</div>
+          <div class="scale-bar"></div>
+          <div class="scale-labels">
+            <span style="color:#ff4545">&lt;65 Плохо</span>
+            <span style="color:var(--accent5)">65–85 Средне</span>
+            <span style="color:var(--accent2)">≥85 Хорошо</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ OO ═══════════════════════ -->
+<div class="section" id="tab-oo">
+  <div class="sec-title">Объектно-ориентированные метрики</div>
+
+  <div class="note note-blue" style="margin-bottom:20px; font-size:13px; color:var(--text)">
+    Применяются к ООП-коду. Оценивают структуру классов: насколько глубока иерархия наследования и насколько классы зависят друг от друга.
+  </div>
+
+  <div class="grid">
+    <div class="card c-blue">
+      <div class="card-head"><div class="num-badge">1a</div><div><div class="card-name">DIT — Глубина наследования</div><div class="card-en">Depth of Inheritance Tree</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">DIT</span> <span class="op">=</span> <span class="fn">max</span>(уровней наследования)</div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">DIT=0</span><span class="var-desc">корневой класс (не наследует ничего)</span></div>
+          <div class="var-row"><span class="var-sym">DIT=1</span><span class="var-desc">наследует от корня</span></div>
+          <div class="var-row"><span class="var-sym">DIT=N</span><span class="var-desc">N уровней вложенности наследования</span></div>
+        </div>
+        <div class="note note-blue">Рекомендуемое значение: <strong>DIT ≤ 5</strong>. Глубокие иерархии трудно понять и изменить.</div>
+      </div>
+    </div>
+
+    <div class="card c-blue">
+      <div class="card-head"><div class="num-badge">1б</div><div><div class="card-name">CBO — Взаимозависимость</div><div class="card-en">Coupling Between Objects</div></div></div>
+      <div class="card-body">
+        <div class="formula"><span class="var">CBO</span> <span class="op">=</span> |{ связанных классов }|</div>
+        <div class="vars">
+          <div class="var-row"><span class="var-sym">Связь</span><span class="var-desc">класс A использует методы/поля класса B, или B использует A</span></div>
+        </div>
+        <div class="note note-blue">Рекомендуемое значение: <strong>CBO ≤ 5</strong>. Высокий CBO → система хрупкая, изменения в одном классе ломают другие.</div>
+      </div>
+    </div>
+  </div>
+
+  <table class="mtable" style="margin-top:20px">
+    <thead><tr><th>Метрика</th><th>Норма</th><th>Что означает нарушение</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--accent)">DIT &gt; 5</td>
+        <td style="color:var(--accent3); font-size:12px">⚠️ Высокое</td>
+        <td style="color:var(--muted); font-size:12px">Сложно понять, какие методы унаследованы. Высокий риск ошибок.</td>
+      </tr>
+      <tr>
+        <td style="color:var(--accent)">CBO &gt; 5</td>
+        <td style="color:var(--accent3); font-size:12px">⚠️ Высокое</td>
+        <td style="color:var(--muted); font-size:12px">Класс слишком зависим — трудно переиспользовать и тестировать.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ QUICK ═══════════════════════ -->
+<div class="section" id="tab-quick">
+  <div class="sec-title">⚡ Быстрый повтор — все формулы</div>
+
+  <div class="qr-grid">
+    <div class="qr-card">
+      <div class="qr-num">№11</div>
+      <div class="qr-name">Словарь программы</div>
+      <div class="qr-formula">n = n₁ + n₂</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№2</div>
+      <div class="qr-name">Длина программы</div>
+      <div class="qr-formula">N = N₁ + N₂</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№9</div>
+      <div class="qr-name">Объём программы</div>
+      <div class="qr-formula">V = N × log₂(n)</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№8</div>
+      <div class="qr-name">Метрика Холстеда</div>
+      <div class="qr-formula">D, E = D×V, T = E/18</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№6</div>
+      <div class="qr-name">Чепин (I/O)</div>
+      <div class="qr-formula">Q = P+2M+3C+0.5T</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№10</div>
+      <div class="qr-name">Чепин полная</div>
+      <div class="qr-formula">Q = Q_вв + Q_выв</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№5</div>
+      <div class="qr-name">SLOC</div>
+      <div class="qr-formula">все строки исходника</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№4</div>
+      <div class="qr-name">ELOC</div>
+      <div class="qr-formula">SLOC − N_ком − N_пуст</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№13</div>
+      <div class="qr-name">Цикломатич. сложность</div>
+      <div class="qr-formula">V(G) = e − n + 2p</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№12</div>
+      <div class="qr-name">Уровень комментариев</div>
+      <div class="qr-formula">C_rate = N_ком / N_стр</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№7</div>
+      <div class="qr-name">Метрика стилистики</div>
+      <div class="qr-formula">f(C_rate, имена, отступы)</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№3</div>
+      <div class="qr-name">MI — поддерживаемость</div>
+      <div class="qr-formula">171−5.2ln(V)−0.23V(G)…</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№1а</div>
+      <div class="qr-name">DIT наследование</div>
+      <div class="qr-formula">max(уровней) ≤ 5</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-num">№1б</div>
+      <div class="qr-name">CBO зависимость</div>
+      <div class="qr-formula">|связанных классов| ≤ 5</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Полная формула MI (запомнить!)</div>
+  <div class="formula" style="font-size:14px; line-height:2">
+<span class="var">MI</span> <span class="op">=</span> <span class="num">171</span>
+   <span class="op">−</span> <span class="num">5.2</span>  <span class="op">×</span> <span class="fn">ln</span>(<span class="var">V</span>)          <span class="fn">← объём Холстеда</span>
+   <span class="op">−</span> <span class="num">0.23</span> <span class="op">×</span> <span class="var">V(G)</span>         <span class="fn">← цикломатическая</span>
+   <span class="op">−</span> <span class="num">16.2</span> <span class="op">×</span> <span class="fn">ln</span>(<span class="var">SLOC</span>)      <span class="fn">← размер кода</span>
+   <span class="op">+</span> <span class="num">50</span>   <span class="op">×</span> <span class="fn">sin</span>(√(<span class="num">2.4</span><span class="op">×</span><span class="var">C_rate</span>)) <span class="fn">← комментарии</span></div>
+
+  <div class="note note-blue" style="font-size:13px; margin-top:0">
+    <strong>Мнемоника для MI:</strong> «171 минус три штрафа (за объём, сложность, размер) плюс бонус за комментарии»
+  </div>
+
+  <div class="sec-title" style="margin-top:24px">Коэффициенты Чепина (запомнить!)</div>
+  <div class="formula" style="font-size:15px">
+<span class="var">P</span> <span class="op">=</span> <span class="num">1</span>   <span class="fn">← просто вход</span>
+<span class="var">M</span> <span class="op">=</span> <span class="num">2</span>   <span class="fn">← вход + выход</span>
+<span class="var">C</span> <span class="op">=</span> <span class="num">3</span>   <span class="fn">← управляет потоком (САМОЕ ОПАСНОЕ)</span>
+<span class="var">T</span> <span class="op">=</span> <span class="num">0.5</span> <span class="fn">← паразитная</span></div>
+</div>
+
+</main>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
